@@ -1,5 +1,8 @@
 # newrelic-hpa-demo
 
+This work is based on the New Relic Custom Metrics adapter found [here](https://github.com/kidk/k8s-newrelic-adapter).
+
+
 ### Minikube Settings
 
 ```
