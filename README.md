@@ -37,6 +37,11 @@ kubectl apply -f 04-hpa.yaml
 
 ```
 $ kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1" | jq .
+```
+
+You should see output similar to this:
+
+```
 {
   "kind": "APIResourceList",
   "apiVersion": "v1",
@@ -49,11 +54,11 @@ $ kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1" | jq .
 ### Port Forward
 
 ```
-kubectl port-forward svc/hello-world-service -n hpa-demo 8000 &
+kubectl port-forward svc/hello-world-service -n hpa-demo 8000 > /dev/null &
 ```
 
 ### Generate Load
 
 ```
-while true; do curl http://localhost:8000/; sleep 0.5; done
+while true; do curl http://localhost:8000/ > /dev/null; sleep 0.5; done
 ```
