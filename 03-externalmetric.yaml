@@ -1,0 +1,13 @@
+apiVersion: metrics.newrelic/v1alpha1
+kind: ExternalMetric
+metadata:
+  name: hello-world-throughput
+  namespace: hpa-demo
+spec:
+  name: hello-world-throughput
+  resource:
+    resource: "deployment"
+  queries:
+    - id: hello-world-throughput
+      query: "FROM Transaction select rate(count(*), 1 minute) since 1 minute ago where host like 'hello-world-java%'"
+

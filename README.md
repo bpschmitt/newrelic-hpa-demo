@@ -6,12 +6,19 @@
 minikube -p hpa-demo start --extra-config=controller-manager.horizontal-pod-autoscaler-upscale-delay=1m --extra-config=controller-manager.horizontal-pod-autoscaler-downscale-delay=1m --extra-config=controller-manager.horizontal-pod-autoscaler-sync-period=15s --extra-config=controller-manager.horizontal-pod-autoscaler-downscale-stabilization=1m
 ```
 
+### Create Namespaces
+
+```
+kubectl create namespace newrelic-custom-metrics
+kubectl create namespace hpa-demo
+```
+
 ### Create Secrets
 
 ```
 kubectl create secret generic nrlicensekey -n hpa-demo --from-literal=nrlicensekey=<NR LICENSE KEY> 
 
-kubectl create secret generic newrelic-adapter -n nr-custom-metrics --from-literal=account_id=<NR ACCOUNT ID> --from-literal=personal_api_key=<NR USER API KEY>
+kubectl create secret generic newrelic-adapter -n newrelic-custom-metrics --from-literal=account_id=<NR ACCOUNT ID> --from-literal=personal_api_key=<NR USER API KEY>
 ```
 
 ### Apply Manifests
