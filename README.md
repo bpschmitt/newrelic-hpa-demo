@@ -28,8 +28,8 @@ kubectl create secret generic newrelic-adapter -n newrelic-custom-metrics --from
 
 ```
 kubectl apply -f 01-hello-world-deployment.yaml
-kubectl apply -f 02-adapter.yaml
-kubectl apply -f 03-externalmetric.yaml
+kubectl apply -f 02-custom-metrics-adapter.yaml
+kubectl apply -f 03-external-metric.yaml
 kubectl apply -f 04-hpa.yaml
 ```
 
