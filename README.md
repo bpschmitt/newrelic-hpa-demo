@@ -60,5 +60,5 @@ kubectl port-forward svc/hello-world-service -n hpa-demo 8000 > /dev/null &
 ### Generate Load
 
 ```
-while true; do curl http://localhost:8000/ > /dev/null; sleep 0.5; done
+while true; do curl -s http://localhost:8000/ > /dev/null; sleep 0.5; done
 ```
