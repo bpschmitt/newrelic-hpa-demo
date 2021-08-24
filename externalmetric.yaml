@@ -1,0 +1,13 @@
+apiVersion: metrics.newrelic/v1alpha1
+kind: ExternalMetric
+metadata:
+  name: hello-world
+  namespace: hpa-demo
+spec:
+  name: hello-world
+  resource:
+    resource: "deployment"
+  queries:
+    - id: hello-world
+      query: "FROM Transaction select rate(count(*), 1 minute) since 1 minute ago where podName like 'hello-world-java%'"
+

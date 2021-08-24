@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-service
+  namespace: hpa-demo
+spec:
+  ports:
+    - port: 8000
+      targetPort: 8080
+  selector:
+    app: hello-world-java
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-java
+  namespace: hpa-demo
+spec:
+  selector:
+    matchLabels:
+      app: hello-world-java
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hello-world-java
+    spec:
+      containers:
+      - name: hello-world-java
+        image: bpschmitt/brad-demo-app:0.1
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "256M"
+            cpu: "250m"
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: agentdir
+          mountPath: "/agent-dir"
+        command: ["java"]
+        args: ["-javaagent:/agent-dir/newrelic-agent.jar", "-jar", "brad-demo-app.jar"]
+        env:
+        - name: NEW_RELIC_LICENSE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nrlicensekey
+              key: nrlicensekey
+        - name: NEW_RELIC_APP_NAME
+          value: "hello-world-java"
+      initContainers:
+      - name: newrelic-java-sidecar
+        image: alpine:latest
+        imagePullPolicy: IfNotPresent
+        command:
+        - wget
+        - "-O"
+        - "/agent-dir/newrelic-agent.jar"
+        - "http://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-agent.jar"
+        volumeMounts:
+        - name: agentdir
+          mountPath: "/agent-dir"
+      volumes:
+      - name: agentdir
+        emptyDir: {}
