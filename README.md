@@ -33,10 +33,10 @@ kubectl apply -f 03-external-metric.yaml
 kubectl apply -f 04-hpa.yaml
 ```
 
-### Verify the Deployment
+### Verify the External Metric Creation
 
 ```
-$ kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1" | jq .
+kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1" | jq .
 ```
 
 You should see output similar to this:

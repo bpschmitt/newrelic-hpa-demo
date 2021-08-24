@@ -25,57 +25,6 @@ subjects:
   name: k8s-newrelic-adapter
   namespace: newrelic-custom-metrics
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app: k8s-newrelic-adapter
-  name: k8s-newrelic-adapter
-  namespace: newrelic-custom-metrics
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: k8s-newrelic-adapter
-  template:
-    metadata:
-      labels:
-        app: k8s-newrelic-adapter
-      name: k8s-newrelic-adapter
-    spec:
-      serviceAccountName: k8s-newrelic-adapter
-      containers:
-      - name: k8s-newrelic-adapter
-        image: ghcr.io/kidk/k8s-newrelic-adapter:latest
-        env:
-          - name: NEW_RELIC_API_KEY
-            valueFrom:
-              secretKeyRef:
-                name: newrelic-adapter
-                key: personal_api_key
-          - name: NEW_RELIC_ACCOUNT_ID
-            valueFrom:
-              secretKeyRef:
-                name: newrelic-adapter
-                key: account_id
-        args:
-        - /adapter
-        - --cert-dir=/tmp
-        - --secure-port=6443
-        - --logtostderr=true
-        - --v=10
-        ports:
-        - containerPort: 6443
-          name: https
-        - containerPort: 8080
-          name: http
-        volumeMounts:
-        - mountPath: /tmp
-          name: temp-vol
-      volumes:
-      - name: temp-vol
-        emptyDir: {}
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -206,3 +155,59 @@ subjects:
   - name: k8s-newrelic-adapter
     namespace: newrelic-custom-metrics
     kind: ServiceAccount
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: k8s-newrelic-adapter
+  name: k8s-newrelic-adapter
+  namespace: newrelic-custom-metrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-newrelic-adapter
+  template:
+    metadata:
+      labels:
+        app: k8s-newrelic-adapter
+      name: k8s-newrelic-adapter
+    spec:
+      serviceAccountName: k8s-newrelic-adapter
+      containers:
+      - name: k8s-newrelic-adapter
+        image: ghcr.io/kidk/k8s-newrelic-adapter:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "256M"
+            cpu: "250m"
+        env:
+          - name: NEW_RELIC_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: newrelic-adapter
+                key: personal_api_key
+          - name: NEW_RELIC_ACCOUNT_ID
+            valueFrom:
+              secretKeyRef:
+                name: newrelic-adapter
+                key: account_id
+        args:
+        - /adapter
+        - --cert-dir=/tmp
+        - --secure-port=6443
+        - --logtostderr=true
+        - --v=10
+        ports:
+        - containerPort: 6443
+          name: https
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /tmp
+          name: temp-vol
+      volumes:
+      - name: temp-vol
+        emptyDir: {}
