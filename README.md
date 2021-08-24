@@ -33,6 +33,19 @@ kubectl apply -f 03-externalmetric.yaml
 kubectl apply -f 04-hpa.yaml
 ```
 
+### Verify the Deployment
+
+```
+$ kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1" | jq .
+{
+  "kind": "APIResourceList",
+  "apiVersion": "v1",
+  "groupVersion": "external.metrics.k8s.io/v1beta1",
+  "resources": [
+  ]
+}
+```
+
 ### Port Forward
 
 ```
