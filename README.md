@@ -47,6 +47,15 @@ You should see output similar to this:
   "apiVersion": "v1",
   "groupVersion": "external.metrics.k8s.io/v1beta1",
   "resources": [
+    {
+      "name": "hello-world-throughput",
+      "singularName": "",
+      "namespaced": true,
+      "kind": "ExternalMetricValueList",
+      "verbs": [
+        "get"
+      ]
+    }
   ]
 }
 ```
