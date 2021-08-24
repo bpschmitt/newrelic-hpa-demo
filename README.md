@@ -20,16 +20,15 @@ kubectl create namespace hpa-demo
 
 ```
 kubectl create secret generic nrlicensekey -n hpa-demo --from-literal=nrlicensekey=<NR LICENSE KEY> 
-
 kubectl create secret generic newrelic-adapter -n newrelic-custom-metrics --from-literal=account_id=<NR ACCOUNT ID> --from-literal=personal_api_key=<NR USER API KEY>
 ```
 
 ### Apply Manifests
 
 ```
-kubectl apply -f 01-hello-world-deployment.yaml
-kubectl apply -f 02-custom-metrics-adapter.yaml
-kubectl apply -f 03-external-metric.yaml
+kubectl apply -f 01-hello-world-deployment.yaml && \
+kubectl apply -f 02-custom-metrics-adapter.yaml && \
+kubectl apply -f 03-external-metric.yaml && \
 kubectl apply -f 04-hpa.yaml
 ```
 
